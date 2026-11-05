@@ -85,7 +85,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_RNRTQk9GW4AG7GPuhiWIVg_589mxVrd";
 
 const $ = id => document.getElementById(id);
 const ranges={1:[1,151],2:[152,251],3:[252,386]};
-let supabase=null,user=null,all=[],caught=new Set(),generation='all',filter='all',page=0,channel=null;
+let supabaseClient=null,user=null,all=[],caught=new Set(),generation='all',filter='all',page=0,channel=null;
 const perPage=30;
 function message(t){$('message').textContent=t}
 function authMessage(t){$('authMessage').textContent=t}
@@ -111,19 +111,19 @@ function render(){
 async function toggle(id,checked){
  setSync('Guardando...');
  try{
-  if(checked){let {error}=await supabase.from('pokemon_captures').upsert({user_id:user.id,pokemon_id:id},{onConflict:'user_id,pokemon_id'});if(error)throw error;caught.add(id)}
-  else{let {error}=await supabase.from('pokemon_captures').delete().eq('user_id',user.id).eq('pokemon_id',id);if(error)throw error;caught.delete(id)}
+  if(checked){let {error}=await supabaseClient.from('pokemon_captures').upsert({user_id:user.id,pokemon_id:id},{onConflict:'user_id,pokemon_id'});if(error)throw error;caught.add(id)}
+  else{let {error}=await supabaseClient.from('pokemon_captures').delete().eq('user_id',user.id).eq('pokemon_id',id);if(error)throw error;caught.delete(id)}
   setSync('✓ Sincronizado');render();
  }catch(e){setSync('Error al guardar');message('No se pudo guardar el cambio: '+e.message);render()}
 }
 async function loadCaptures(){
  setSync('Sincronizando...');
- const {data,error}=await supabase.from('pokemon_captures').select('pokemon_id');
+ const {data,error}=await supabaseClient.from('pokemon_captures').select('pokemon_id');
  if(error)throw error;caught=new Set(data.map(x=>x.pokemon_id));setSync('✓ Sincronizado');render();
 }
 function subscribe(){
- if(channel)supabase.removeChannel(channel);
- channel=supabase.channel('my-pokemon-captures').on('postgres_changes',{event:'*',schema:'public',table:'pokemon_captures',filter:'user_id=eq.'+user.id},payload=>{
+ if(channel)supabaseClient.removeChannel(channel);
+ channel=supabaseClient.channel('my-pokemon-captures').on('postgres_changes',{event:'*',schema:'public',table:'pokemon_captures',filter:'user_id=eq.'+user.id},payload=>{
   if(payload.eventType==='INSERT')caught.add(payload.new.pokemon_id);
   if(payload.eventType==='DELETE')caught.delete(payload.old.pokemon_id);
   render();setSync('✓ Actualizado');
@@ -141,19 +141,19 @@ async function enterApp(session){
 async function init(){
  if(!readyConfig()){authMessage('Antes de usarla, configura SUPABASE_URL y SUPABASE_ANON_KEY en el archivo index.html siguiendo el archivo LEEME.');$('signIn').disabled=true;$('signUp').disabled=true;return}
  if(!window.supabase){authMessage('No se pudo cargar Supabase. Revisa tu conexión.');return}
- supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
- const {data:{session}}=await supabase.auth.getSession();
- supabase.auth.onAuthStateChange((_event,s)=>{if(s&&!user)enterApp(s);else if(!s){user=null;$('appPanel').classList.add('hidden');$('authPanel').classList.remove('hidden')}});
+ supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+ const {data:{session}}=await supabaseClient.auth.getSession();
+ supabaseClient.auth.onAuthStateChange((_event,s)=>{if(s&&!user)enterApp(s);else if(!s){user=null;$('appPanel').classList.add('hidden');$('authPanel').classList.remove('hidden')}});
  if(session)await enterApp(session);
 }
-$('signIn').onclick=async()=>{authMessage('');let {error}=await supabase.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)authMessage(error.message)};
-$('signUp').onclick=async()=>{authMessage('');let {data,error}=await supabase.auth.signUp({email:$('email').value.trim(),password:$('password').value});if(error)authMessage(error.message);else authMessage(data.session?'Cuenta creada. ¡Bienvenida!':'Cuenta creada. Revisa tu correo para confirmar la cuenta y luego inicia sesión.')};
-$('signOut').onclick=async()=>{if(channel)await supabase.removeChannel(channel);await supabase.auth.signOut();user=null;caught.clear()};
+$('signIn').onclick=async()=>{authMessage('');let {error}=await supabaseClient.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)authMessage(error.message)};
+$('signUp').onclick=async()=>{authMessage('');let {data,error}=await supabaseClient.auth.signUp({email:$('email').value.trim(),password:$('password').value});if(error)authMessage(error.message);else authMessage(data.session?'Cuenta creada. ¡Bienvenida!':'Cuenta creada. Revisa tu correo para confirmar la cuenta y luego inicia sesión.')};
+$('signOut').onclick=async()=>{if(channel)await supabaseClient.removeChannel(channel);await supabaseClient.auth.signOut();user=null;caught.clear()};
 $('search').oninput=()=>{page=0;render()};$('clear').onclick=()=>{$('search').value='';page=0;render()};
 $('prev').onclick=()=>{page--;render()};$('next').onclick=()=>{page++;render()};
 document.querySelectorAll('[data-gen]').forEach(b=>b.onclick=()=>{generation=b.dataset.gen;page=0;document.querySelectorAll('[data-gen]').forEach(x=>x.classList.toggle('active',x===b));render()});
 document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;page=0;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));render()});
-$('reset').onclick=async()=>{if(!confirm('¿Seguro que deseas borrar todas tus capturas de la nube?'))return;setSync('Borrando...');let {error}=await supabase.from('pokemon_captures').delete().eq('user_id',user.id);if(error){message(error.message);setSync('Error');return}caught.clear();render();setSync('✓ Sincronizado')};
+$('reset').onclick=async()=>{if(!confirm('¿Seguro que deseas borrar todas tus capturas de la nube?'))return;setSync('Borrando...');let {error}=await supabaseClient.from('pokemon_captures').delete().eq('user_id',user.id);if(error){message(error.message);setSync('Error');return}caught.clear();render();setSync('✓ Sincronizado')};
 init();
 </script>
 </body></html>
