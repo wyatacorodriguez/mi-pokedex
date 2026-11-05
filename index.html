@@ -31,6 +31,10 @@ label.field{display:block;font-size:13px;font-weight:650;margin:10px 0 5px}
 .pokemon-list{max-height:650px;overflow:auto}
 .pokemon-row{display:flex;align-items:center;gap:9px;padding:8px 11px;border-bottom:1px solid #f0f0f0;min-height:46px}
 .pokemon-row:last-child{border-bottom:0}.pokemon-row:hover{background:#fafafa}
+.pokemon-thumb{width:38px;height:38px;object-fit:contain;flex-shrink:0;background:#f5f5f5;border-radius:9px}
+.pokemon-name{font-weight:750}
+.pokemon-name.done{font-weight:750;text-decoration:line-through;color:#777}
+
 .pokemon-row input{width:19px;height:19px;accent-color:#269b68;flex-shrink:0}
 .pokemon-name{border:0;background:transparent;padding:2px 0;text-align:left;font-weight:650;color:#262626;min-width:0;flex:1}
 .pokemon-name:hover{text-decoration:underline;color:#b9363e}
@@ -112,8 +116,11 @@ function stats(){
 function makeRow(p,withCheck){
  const done=caught.has(p.id),row=document.createElement('div');row.className='pokemon-row';
  const num=document.createElement('span');num.className='pokemon-number';num.textContent='#'+String(p.id).padStart(3,'0');
- const name=document.createElement('button');name.type='button';name.className='pokemon-name'+(done?' done':'');name.textContent=titleCase(p.name);name.addEventListener('click',()=>openPokemon(p));
- row.append(num);
+ const img=document.createElement('img');img.className='pokemon-thumb';img.alt='';img.loading='lazy';
+ img.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/'+p.id+'.gif';
+ img.onerror=()=>{img.onerror=()=>{img.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png'};img.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'+p.id+'.png'};
+ const name=document.createElement('button');name.type='button';name.className='pokemon-name'+(withCheck&&done?' done':'');name.textContent=titleCase(p.name);name.addEventListener('click',()=>openPokemon(p));
+ row.append(num,img);
  if(withCheck){const cb=document.createElement('input');cb.type='checkbox';cb.checked=done;cb.setAttribute('aria-label','Marcar '+p.name+' como atrapado');cb.addEventListener('change',()=>toggle(p.id,cb.checked));row.append(cb)}
  row.append(name);return row;
 }
