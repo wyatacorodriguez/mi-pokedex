@@ -81,7 +81,7 @@ label.field{display:block;font-size:13px;font-weight:650;margin:10px 0 5px}
 <button class="chip active" data-gen="all">Todos · 386</button><button class="chip" data-gen="1">Kanto · 151</button><button class="chip" data-gen="2">Johto · 100</button><button class="chip" data-gen="3">Hoenn · 135</button>
 </div>
 <div class="toolbar"><input id="search" type="search" placeholder="Buscar por nombre o número..."><button id="clear" class="secondary">Limpiar</button></div>
-<div class="row small" style="margin-top:10px"><span id="showing" class="muted">Cargando Pokémon...</span><button id="reset" class="secondary">Borrar mis capturas</button></div>
+<div class="row small" style="margin-top:10px"><span id="showing" class="muted">Cargando Pokémon...</span></div>
 </div>
 <div id="message" aria-live="polite" class="muted">Cargando Pokédex...</div>
 <div class="columns">
@@ -119,6 +119,7 @@ function makeRow(p,withCheck){
  const img=document.createElement('img');img.className='pokemon-thumb';img.alt='';img.loading='lazy';
  img.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/'+p.id+'.gif';
  img.onerror=()=>{img.onerror=()=>{img.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png'};img.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'+p.id+'.png'};
+ img.style.cursor='pointer';img.title='Ver detalles de '+titleCase(p.name);img.addEventListener('click',()=>openPokemon(p));
  const name=document.createElement('button');name.type='button';name.className='pokemon-name'+(withCheck&&done?' done':'');name.textContent=titleCase(p.name);name.addEventListener('click',()=>openPokemon(p));
  row.append(num,img);
  if(withCheck){const cb=document.createElement('input');cb.type='checkbox';cb.checked=done;cb.setAttribute('aria-label','Marcar '+p.name+' como atrapado');cb.addEventListener('change',()=>toggle(p.id,cb.checked));row.append(cb)}
@@ -193,7 +194,6 @@ $('signUp').onclick=async()=>{authMessage('');let {data,error}=await supabaseCli
 $('signOut').onclick=async()=>{if(channel)await supabaseClient.removeChannel(channel);await supabaseClient.auth.signOut();user=null;caught.clear()};
 $('search').oninput=render;$('clear').onclick=()=>{$('search').value='';render()};
 document.querySelectorAll('[data-gen]').forEach(b=>b.onclick=()=>{generation=b.dataset.gen;document.querySelectorAll('[data-gen]').forEach(x=>x.classList.toggle('active',x===b));render()});
-$('reset').onclick=async()=>{if(!confirm('¿Seguro que deseas borrar todas tus capturas de la nube?'))return;setSync('Borrando...');let {error}=await supabaseClient.from('pokemon_captures').delete().eq('user_id',user.id);if(error){message(error.message);setSync('Error');return}caught.clear();render();setSync('✓ Sincronizado')};
 init();
 </script>
 </body></html>
