@@ -9,34 +9,42 @@
 <style>
 :root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#222;background:#f5f5f5}
 *{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}
-header{background:linear-gradient(120deg,#a82d36,#e05242);color:white;padding:22px max(16px,calc((100% - 1050px)/2))}
+header{background:linear-gradient(120deg,#a82d36,#e05242);color:white;padding:20px max(16px,calc((100% - 1250px)/2))}
 header h1{margin:3px 0;font-size:clamp(25px,5vw,38px)}header p{margin:0;opacity:.9;font-size:13px}
-main{max-width:1050px;margin:auto;padding:16px}
-.panel{background:white;border:1px solid #e4e4e7;border-radius:16px;padding:15px;margin-bottom:14px}
+main{max-width:1250px;margin:auto;padding:16px}.panel{background:white;border:1px solid #e4e4e7;border-radius:16px;padding:15px;margin-bottom:14px}
 .hidden{display:none!important}.muted{color:#71717a}.small{font-size:12px}
 button.primary{background:#b9363e;color:white;border:0;border-radius:10px;padding:10px 15px;font-weight:700}
 button.secondary,.chip{background:white;border:1px solid #ddd;border-radius:10px;padding:8px 12px}
 button:disabled{opacity:.45;cursor:not-allowed}
 input[type=email],input[type=password],input[type=search]{width:100%;padding:11px;border:1px solid #d4d4d8;border-radius:10px;background:white;color:#222}
 label.field{display:block;font-size:13px;font-weight:650;margin:10px 0 5px}
-.auth{max-width:430px;margin:35px auto}.auth h2{margin-top:0}
-.auth-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.auth{max-width:430px;margin:35px auto}.auth h2{margin-top:0}.auth-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:#f4f4f5;border-radius:12px;padding:10px;text-align:center}.stat strong{display:block;font-size:25px}
 .progress{height:9px;background:#e4e4e7;border-radius:20px;overflow:hidden}.progress>div{height:100%;background:#269b68;width:0}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.genlist,.filters{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
-.chip.active{background:#fce7e8;border-color:#c64a50;font-weight:700}
+.genlist,.filters{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.chip.active{background:#fce7e8;border-color:#c64a50;font-weight:700}
 .toolbar{display:grid;grid-template-columns:1fr auto;gap:8px}
-.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.pokemon{display:flex;align-items:center;gap:10px;padding:9px;border:1px solid #e4e4e7;border-radius:13px;background:white;min-width:0}
-.pokemon.caught{border-color:#269b68;background:#f0faf4}
-.pokemon img{width:58px;height:58px;object-fit:contain;background:#f4f4f5;border-radius:10px;flex-shrink:0}
-.pinfo{min-width:0;flex:1}.pname{text-transform:capitalize;font-size:14px;font-weight:750;overflow-wrap:anywhere}
-.pnum{font-size:11px;color:#71717a}.status{font-size:10px;color:#71717a}
-.check{width:23px;height:23px;accent-color:#269b68;flex-shrink:0}
-.pager{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px}
+.columns{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;align-items:start}
+.list-panel{border:1px solid #e4e4e7;border-radius:14px;background:#fff;overflow:hidden;min-width:0}
+.list-heading{padding:12px 13px;background:#f7f7f8;border-bottom:1px solid #e4e4e7;display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:800}
+.list-heading .count{font-size:12px;color:#71717a;background:#e9e9eb;border-radius:20px;padding:3px 8px}
+.pokemon-list{max-height:650px;overflow:auto}
+.pokemon-row{display:flex;align-items:center;gap:9px;padding:8px 11px;border-bottom:1px solid #f0f0f0;min-height:46px}
+.pokemon-row:last-child{border-bottom:0}.pokemon-row:hover{background:#fafafa}
+.pokemon-row input{width:19px;height:19px;accent-color:#269b68;flex-shrink:0}
+.pokemon-name{border:0;background:transparent;padding:2px 0;text-align:left;font-weight:650;color:#262626;min-width:0;flex:1}
+.pokemon-name:hover{text-decoration:underline;color:#b9363e}
+.pokemon-name.done{text-decoration:line-through;color:#777}
+.pokemon-number{font-size:11px;color:#888;min-width:36px}
+.empty{padding:18px;text-align:center;color:#888;font-size:13px}
 #message{font-size:13px;margin:8px 0;min-height:18px}
-@media(max-width:570px){.cards{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.stats strong{font-size:22px}main{padding:11px}}
+.modal-backdrop{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:18px;z-index:10}
+.modal{width:min(460px,100%);background:white;border-radius:18px;padding:18px;box-shadow:0 18px 60px #0004;position:relative}
+.modal-close{position:absolute;right:13px;top:12px;border:0;background:#eee;border-radius:50%;width:34px;height:34px;font-size:20px}
+.modal-top{display:flex;align-items:center;gap:16px;padding-right:35px}.modal-top img{width:116px;height:116px;object-fit:contain;background:#f5f5f5;border-radius:14px}
+.modal h2{margin:0 0 5px;text-transform:capitalize}.modal-info{margin-top:15px;padding:12px;background:#f7f7f8;border-radius:12px;font-size:13px;color:#666}
+@media(max-width:850px){.columns{grid-template-columns:1fr 1fr}.list-panel:first-child{grid-column:1/-1}.pokemon-list{max-height:440px}}
+@media(max-width:570px){.columns{grid-template-columns:1fr}.list-panel:first-child{grid-column:auto}.toolbar{grid-template-columns:1fr}.stats strong{font-size:22px}main{padding:11px}.pokemon-list{max-height:360px}}
 </style>
 </head>
 <body>
@@ -58,8 +66,8 @@ label.field{display:block;font-size:13px;font-weight:650;margin:10px 0 5px}
 <div class="row"><div><strong>Mi progreso</strong><div class="small muted" id="userEmail"></div></div><div class="row"><span id="syncStatus" class="small muted">Conectando...</span><button id="signOut" class="secondary">Cerrar sesión</button></div></div>
 <div class="stats" style="margin:14px 0 10px">
 <div class="stat"><strong id="total">386</strong><span class="small muted">Total</span></div>
-<div class="stat"><strong id="caught">0</strong><span class="small muted">Capturados</span></div>
-<div class="stat"><strong id="missing">386</strong><span class="small muted">Faltantes</span></div>
+<div class="stat"><strong id="caught">0</strong><span class="small muted">Atrapados</span></div>
+<div class="stat"><strong id="missing">386</strong><span class="small muted">Sin capturar</span></div>
 </div>
 <div class="row small"><span>Progreso de captura</span><strong id="pct">0%</strong></div><div class="progress"><div id="progress"></div></div>
 </div>
@@ -69,50 +77,64 @@ label.field{display:block;font-size:13px;font-weight:650;margin:10px 0 5px}
 <button class="chip active" data-gen="all">Todos · 386</button><button class="chip" data-gen="1">Kanto · 151</button><button class="chip" data-gen="2">Johto · 100</button><button class="chip" data-gen="3">Hoenn · 135</button>
 </div>
 <div class="toolbar"><input id="search" type="search" placeholder="Buscar por nombre o número..."><button id="clear" class="secondary">Limpiar</button></div>
-<div class="filters" id="filters"><button class="chip active" data-filter="all">Todos</button><button class="chip" data-filter="missing">Pendientes</button><button class="chip" data-filter="caught">Capturados</button></div>
-<div class="row small"><span id="showing" class="muted">Cargando Pokémon...</span><button id="reset" class="secondary">Borrar mis capturas</button></div>
+<div class="row small" style="margin-top:10px"><span id="showing" class="muted">Cargando Pokémon...</span><button id="reset" class="secondary">Borrar mis capturas</button></div>
 </div>
 <div id="message" aria-live="polite" class="muted">Cargando Pokédex...</div>
-<div id="list" class="cards"></div>
-<div class="pager"><button id="prev" class="secondary" disabled>← Anterior</button><span id="pageInfo" class="small muted"></span><button id="next" class="secondary" disabled>Siguiente →</button></div>
-<p class="small muted">Los cambios se guardan en tu cuenta. Si marcas un Pokémon en un dispositivo, aparecerá capturado en los demás cuando estén conectados a internet.</p>
+<div class="columns">
+<div class="list-panel"><div class="list-heading"><span>POKÉMON · MARCAR</span><span class="count" id="masterCount">386</span></div><div id="masterList" class="pokemon-list"></div></div>
+<div class="list-panel"><div class="list-heading"><span>ATRAPADOS</span><span class="count" id="caughtCount">0</span></div><div id="caughtList" class="pokemon-list"></div></div>
+<div class="list-panel"><div class="list-heading"><span>SIN CAPTURAR</span><span class="count" id="missingCount">386</span></div><div id="missingList" class="pokemon-list"></div></div>
+</div>
+<p class="small muted">Marca o desmarca en la primera columna. Las otras dos listas se actualizan automáticamente y tus cambios se guardan en tu cuenta para sincronizar tus dispositivos. Pulsa el nombre de cualquier Pokémon para abrir su ficha.</p>
 </section>
 </main>
 <script>
-/* CONFIGURACIÓN: reemplaza estos dos valores por los de tu proyecto Supabase. */
 const SUPABASE_URL = "https://ksnhiydfinoakatlmlnx.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_RNRTQk9GW4AG7GPuhiWIVg_589mxVrd";
-
 const $ = id => document.getElementById(id);
 const ranges={1:[1,151],2:[152,251],3:[252,386]};
-let supabaseClient=null,user=null,all=[],caught=new Set(),generation='all',filter='all',page=0,channel=null;
-const perPage=30;
+let supabaseClient=null,user=null,all=[],caught=new Set(),generation='all',channel=null;
 function message(t){$('message').textContent=t}
 function authMessage(t){$('authMessage').textContent=t}
 function setSync(t){$('syncStatus').textContent=t}
 function readyConfig(){return SUPABASE_URL.startsWith('https://')&&!SUPABASE_ANON_KEY.includes('PEGA_AQUI')}
 function titleCase(s){return s.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}
-function stats(){let n=caught.size;$('caught').textContent=n;$('missing').textContent=386-n;$('pct').textContent=(n/386*100).toFixed(1)+'%';$('progress').style.width=(n/386*100)+'%'}
-function filtered(){let q=$('search').value.trim().toLowerCase();return all.filter(p=>(generation==='all'||(p.id>=ranges[generation][0]&&p.id<=ranges[generation][1]))&&(filter==='all'||(filter==='caught'?caught.has(p.id):!caught.has(p.id)))&&(!q||p.name.includes(q)||String(p.id).padStart(3,'0').includes(q)))}
+function selected(){
+ const q=$('search').value.trim().toLowerCase();
+ return all.filter(p=>(generation==='all'||(p.id>=ranges[generation][0]&&p.id<=ranges[generation][1]))&&(!q||p.name.includes(q)||String(p.id).padStart(3,'0').includes(q)));
+}
+function stats(){
+ const n=caught.size;
+ $('caught').textContent=n;$('missing').textContent=386-n;
+ $('caughtCount').textContent=n;$('missingCount').textContent=386-n;
+ $('pct').textContent=(n/386*100).toFixed(1)+'%';$('progress').style.width=(n/386*100)+'%';
+}
+function makeRow(p,withCheck){
+ const done=caught.has(p.id),row=document.createElement('div');row.className='pokemon-row';
+ const num=document.createElement('span');num.className='pokemon-number';num.textContent='#'+String(p.id).padStart(3,'0');
+ const name=document.createElement('button');name.type='button';name.className='pokemon-name'+(done?' done':'');name.textContent=titleCase(p.name);name.addEventListener('click',()=>openPokemon(p));
+ row.append(num);
+ if(withCheck){const cb=document.createElement('input');cb.type='checkbox';cb.checked=done;cb.setAttribute('aria-label','Marcar '+p.name+' como atrapado');cb.addEventListener('change',()=>toggle(p.id,cb.checked));row.append(cb)}
+ row.append(name);return row;
+}
+function fillList(id,items,withCheck,emptyText){
+ const el=$(id);el.innerHTML='';
+ if(!items.length){const d=document.createElement('div');d.className='empty';d.textContent=emptyText;el.append(d);return}
+ items.forEach(p=>el.append(makeRow(p,withCheck)));
+}
 function render(){
- stats();let data=filtered(),pages=Math.max(1,Math.ceil(data.length/perPage));page=Math.min(page,pages-1);let slice=data.slice(page*perPage,(page+1)*perPage);
- $('showing').textContent=data.length+' Pokémon encontrados';$('pageInfo').textContent=`Página ${page+1} de ${pages}`;$('prev').disabled=page===0;$('next').disabled=page>=pages-1;$('list').innerHTML='';
- if(!slice.length){$('list').innerHTML='<div class="panel muted">No hay Pokémon en esta selección.</div>';return}
- slice.forEach(p=>{
-  let done=caught.has(p.id),card=document.createElement('label');card.className='pokemon'+(done?' caught':'');
-  let img=document.createElement('img');img.loading='lazy';img.alt=p.name;img.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`;img.onerror=()=>{img.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png`};
-  let info=document.createElement('div');info.className='pinfo';let num=document.createElement('div');num.className='pnum';num.textContent='#'+String(p.id).padStart(3,'0');
-  let name=document.createElement('div');name.className='pname';name.textContent=titleCase(p.name);
-  let status=document.createElement('div');status.className='status';status.textContent=done?'✓ CAPTURADO':'PENDIENTE';info.append(num,name,status);
-  let cb=document.createElement('input');cb.type='checkbox';cb.className='check';cb.checked=done;cb.setAttribute('aria-label','Marcar '+p.name+' como capturado');
-  cb.addEventListener('change',()=>toggle(p.id,cb.checked));card.append(img,info,cb);$('list').append(card);
- });
+ stats();const data=selected(),got=data.filter(p=>caught.has(p.id)),left=data.filter(p=>!caught.has(p.id));
+ $('showing').textContent=data.length+' Pokémon en esta selección';
+ $('masterCount').textContent=data.length;$('caughtCount').textContent=got.length;$('missingCount').textContent=left.length;
+ fillList('masterList',data,true,'No hay Pokémon en esta selección.');
+ fillList('caughtList',got,false,'Todavía no has atrapado ninguno.');
+ fillList('missingList',left,false,'¡Has completado esta selección!');
 }
 async function toggle(id,checked){
  setSync('Guardando...');
  try{
-  if(checked){let {error}=await supabaseClient.from('pokemon_captures').upsert({user_id:user.id,pokemon_id:id},{onConflict:'user_id,pokemon_id'});if(error)throw error;caught.add(id)}
-  else{let {error}=await supabaseClient.from('pokemon_captures').delete().eq('user_id',user.id).eq('pokemon_id',id);if(error)throw error;caught.delete(id)}
+  if(checked){const {error}=await supabaseClient.from('pokemon_captures').upsert({user_id:user.id,pokemon_id:id},{onConflict:'user_id,pokemon_id'});if(error)throw error;caught.add(id)}
+  else{const {error}=await supabaseClient.from('pokemon_captures').delete().eq('user_id',user.id).eq('pokemon_id',id);if(error)throw error;caught.delete(id)}
   setSync('✓ Sincronizado');render();
  }catch(e){setSync('Error al guardar');message('No se pudo guardar el cambio: '+e.message);render()}
 }
@@ -133,13 +155,26 @@ async function loadPokemon(){
  const r=await fetch('https://pokeapi.co/api/v2/pokemon?limit=386&offset=0');if(!r.ok)throw Error('No se pudo cargar la lista de Pokémon.');
  const d=await r.json();all=d.results.map((p,i)=>({id:i+1,name:p.name}));
 }
+function openPokemon(p){
+ const backdrop=document.createElement('div');backdrop.className='modal-backdrop';backdrop.id='pokemonModal';
+ const modal=document.createElement('div');modal.className='modal';modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label','Ficha de '+p.name);
+ const close=document.createElement('button');close.className='modal-close';close.type='button';close.textContent='×';close.setAttribute('aria-label','Cerrar ficha');close.onclick=()=>backdrop.remove();
+ const top=document.createElement('div');top.className='modal-top';
+ const img=document.createElement('img');img.alt=titleCase(p.name);img.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'+p.id+'.png';img.onerror=()=>{img.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/'+p.id+'.png'};
+ const detail=document.createElement('div');const num=document.createElement('div');num.className='small muted';num.textContent='#'+String(p.id).padStart(3,'0');
+ const h=document.createElement('h2');h.textContent=titleCase(p.name);const status=document.createElement('div');status.className='small';status.textContent=caught.has(p.id)?'✓ Atrapado':'Pendiente';detail.append(num,h,status);top.append(img,detail);
+ const info=document.createElement('div');info.className='modal-info';info.textContent='Ficha básica. Más adelante podremos agregar aquí tipo, evolución, habilidades, descripción y otros datos del Pokémon.';
+ modal.append(close,top,info);backdrop.append(modal);backdrop.addEventListener('click',e=>{if(e.target===backdrop)backdrop.remove()});
+ document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){backdrop.remove();document.removeEventListener('keydown',esc)}},{once:true});
+ $('pokemonModal')?.remove();document.body.append(backdrop);
+}
 async function enterApp(session){
  user=session.user;$('authPanel').classList.add('hidden');$('appPanel').classList.remove('hidden');$('userEmail').textContent=user.email||'Cuenta conectada';
- try{await loadPokemon();await loadCaptures();subscribe();message('Pokédex lista. Tus capturas se sincronizan con tu cuenta.')}
+ try{await loadPokemon();await loadCaptures();subscribe();message('Pokédex lista. Marca en la primera columna: las listas de atrapados y sin capturar se actualizan solas.')}
  catch(e){message('No se pudo cargar la información: '+e.message);setSync('Revisar configuración')}
 }
 async function init(){
- if(!readyConfig()){authMessage('Antes de usarla, configura SUPABASE_URL y SUPABASE_ANON_KEY en el archivo index.html siguiendo el archivo LEEME.');$('signIn').disabled=true;$('signUp').disabled=true;return}
+ if(!readyConfig()){authMessage('Configura SUPABASE_URL y SUPABASE_ANON_KEY.');$('signIn').disabled=true;$('signUp').disabled=true;return}
  if(!window.supabase){authMessage('No se pudo cargar Supabase. Revisa tu conexión.');return}
  supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
  const {data:{session}}=await supabaseClient.auth.getSession();
@@ -149,10 +184,8 @@ async function init(){
 $('signIn').onclick=async()=>{authMessage('');let {error}=await supabaseClient.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(error)authMessage(error.message)};
 $('signUp').onclick=async()=>{authMessage('');let {data,error}=await supabaseClient.auth.signUp({email:$('email').value.trim(),password:$('password').value});if(error)authMessage(error.message);else authMessage(data.session?'Cuenta creada. ¡Bienvenida!':'Cuenta creada. Revisa tu correo para confirmar la cuenta y luego inicia sesión.')};
 $('signOut').onclick=async()=>{if(channel)await supabaseClient.removeChannel(channel);await supabaseClient.auth.signOut();user=null;caught.clear()};
-$('search').oninput=()=>{page=0;render()};$('clear').onclick=()=>{$('search').value='';page=0;render()};
-$('prev').onclick=()=>{page--;render()};$('next').onclick=()=>{page++;render()};
-document.querySelectorAll('[data-gen]').forEach(b=>b.onclick=()=>{generation=b.dataset.gen;page=0;document.querySelectorAll('[data-gen]').forEach(x=>x.classList.toggle('active',x===b));render()});
-document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;page=0;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));render()});
+$('search').oninput=render;$('clear').onclick=()=>{$('search').value='';render()};
+document.querySelectorAll('[data-gen]').forEach(b=>b.onclick=()=>{generation=b.dataset.gen;document.querySelectorAll('[data-gen]').forEach(x=>x.classList.toggle('active',x===b));render()});
 $('reset').onclick=async()=>{if(!confirm('¿Seguro que deseas borrar todas tus capturas de la nube?'))return;setSync('Borrando...');let {error}=await supabaseClient.from('pokemon_captures').delete().eq('user_id',user.id);if(error){message(error.message);setSync('Error');return}caught.clear();render();setSync('✓ Sincronizado')};
 init();
 </script>
